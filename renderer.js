@@ -9,7 +9,8 @@ const {
 let $ = require('jquery')
 
 mainProcess = remote.require('./main.js')
-let lastClickWord = null
+let $lastClickedWord = null
+let $lastClickedCandidate = null
 
 // send the word info to the back end
 let getWordDetail = (word) => {
@@ -41,8 +42,8 @@ let refreshOutputText = () => {
       }
     })
 
-    function appendToOutput(x){
-      $('#text_output').append($('<p id="p' + x + '"></p>'))
+    function appendToOutput (x) {
+      $('#text_output').append($('<p class="poem" id="p' + x + '"></p>'))
       for (let i = 0; i < words.length; i++) {
         $('#p' + x).append($('<span class=\'word\'>').text(words[i]))
         if (symbols[i])
@@ -57,17 +58,17 @@ let refreshOutputText = () => {
   // $('#text_output').html()
   $('.word').click(function () {
     // empty submenus
-    $('#synsetSubmenu').empty()
-    $('#antonymsSubmenu').empty()
+    $('#synsets').empty()
+    $('#antonyms').empty()
 
-    if (lastClickWord !== null) {
-      $(lastClickWord).css('background-color', '#fafafa')
-      $(lastClickWord).css('color', '#999')
+    if ($lastClickedWord !== null) {
+      $lastClickedWord.css('background-color', '#fafafa')
+      $lastClickedWord.css('color', '#999')
     }
     getWordDetail($(this).text())
     $(this).css('background-color', '#6d7fcc')
     $(this).css('color', '#fafafa')
-    lastClickWord = this
+    $lastClickedWord = $(this)
   })
 }
 
@@ -80,6 +81,7 @@ $(function () {
   $('#text_input').keypress(function (e) {
     if (e.which == 13) {
       //submit form via ajax, this is not JS but server side scripting so not showing here
+      $('#text_output').empty()
       refreshOutputText()
       e.preventDefault()
     }
@@ -88,19 +90,34 @@ $(function () {
 
 ipcRenderer.on('result', (event, ret) => {
   // synsets
+  $synsets = $('#synsets')
+  $synsets.empty()
   let synsets = ret['synset']
   let synsets_pool = new Set()
 
   // add original word
   synsets_pool.add(ret['word'])
-  $('#synsetSubmenu').append($('<li></li>').html('<a href="#" class="candidate">' + ret['word'] + '</a>'))
+  $synsets.append($('<li></li>').html('<a href="#" class="candidate" description="Reset to the original word">' + ret['word'] + '</a>'))
+
+  function addSynsetSubmenu (i, des) {
+    $synsets.append(
+      $('<a href="#synsetSubmenu' + i + '" data-toggle="collapse" aria-expanded="false">' + des + '</a><ul class="collapse list-unstyled" id="synsetSubmenu' + i + '"></ul>'
+      )
+    )
+    return $('#synsetSubmenu' + i)
+  }
 
   for (let i = 0; i < synsets.length; i++) {
-    for (let j = 0; j < synsets[i].words.length; j++) {
-      let lemma = synsets[i].words[j].lemma
-      if (!synsets_pool.has(lemma)) {
-        synsets_pool.add(lemma)
-        $('#synsetSubmenu').append($('<li></li>').html('<a href="#" class="candidate">' + lemma + '</a>'))
+    if (synsets[i].words.length > 1) {
+      let $synsetSubmenu = addSynsetSubmenu(i, synsets[i].lexdomain)
+
+      for (let j = 0; j < synsets[i].words.length; j++) {
+        let lemma = synsets[i].words[j].lemma
+        let description = synsets[i].definition
+        if (!synsets_pool.has(lemma)) {
+          synsets_pool.add(lemma)
+          $synsetSubmenu.append($('<li></li>').html('<a href="#" class="candidate" description="' + description + '">' + lemma + '</a>'))
+        }
       }
     }
   }
@@ -114,16 +131,34 @@ ipcRenderer.on('result', (event, ret) => {
   $('#antonymsSubmenu').append($('<li></li>').html('<a href="#" class="candidate">' + ret['word'] + '</a>'))
 
   for (let i = 0; i < antonyms.length; i++) {
-      let antonym = antonyms[i].antonym
-      if (!antonyms_pool.has(antonym)) {
-        antonyms_pool.add(antonym)
-        $('#antonymsSubmenu').append($('<li></li>').html('<a href="#" class="candidate">' + antonym + '</a>'))
-      }
+    let antonym = antonyms[i].antonym
+    if (!antonyms_pool.has(antonym)) {
+      antonyms_pool.add(antonym)
+      $('#antonymsSubmenu').append($('<li></li>').html('<a href="#" class="candidate">' + antonym + '</a>'))
+    }
   }
 
+  function showSnackBar () {
+    // Get the snackbar DIV
+    let x = $('#snackbar')
+    let descr = $lastClickedCandidate.attr('description')
+    if (!descr) descr = ''
+    x.text(descr)
+
+    // Add the "show" class to DIV
+    x.attr('class', 'show')
+
+    // After 3 seconds, remove the show class from DIV
+    setTimeout(function () {
+      x.attr('class', '')
+    }, 7000)
+  }
 
   $('.candidate').click(function () {
-    $(lastClickWord).text($(this).text())
+    $lastClickedCandidate = $(this)
+    $lastClickedWord.text($(this).text())
+    showSnackBar()
   })
+
 })
 

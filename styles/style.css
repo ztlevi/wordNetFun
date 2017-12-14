@@ -23,6 +23,10 @@ a, a:hover, a:focus {
     transition: all 0.3s;
 }
 
+.poem {
+    text-align: center;
+}
+
 .navbar {
     padding: 15px 10px;
     background: #fff;

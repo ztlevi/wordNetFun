@@ -13,15 +13,14 @@
     <!-- Sidebar Holder -->
     <nav id="sidebar">
         <div class="sidebar-header">
-            <h3>Bootstrap Sidebar</h3>
+            <h3>Pick word candidates!</h3>
         </div>
 
         <ul class="list-unstyled components">
-            <p>Dummy Heading</p>
-            <li class="active">
-                <a href="#synsetSubmenu" data-toggle="collapse" aria-expanded="false">Synets</a>
-                <ul class="collapse list-unstyled" id="synsetSubmenu"></ul>
+            <p>Synsets</p>
+            <li class="active" id="synsets">
             </li>
+            <p>Antonyms</p>
             <li>
                 <a href="#antonymsSubmenu" data-toggle="collapse" aria-expanded="false">Antonyms</a>
                 <ul class="collapse list-unstyled" id="antonymsSubmenu"></ul>
@@ -49,23 +48,20 @@
                 <div class="navbar-header">
                     <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
                         <i class="glyphicon glyphicon-align-left"></i>
-                        <span>Toggle Word Description</span>
+                        <span>Toggle Sidebar</span>
                     </button>
                 </div>
 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#">Page</a></li>
-                        <li><a href="#">Page</a></li>
-                        <li><a href="#">Page</a></li>
-                        <li><a href="#">Page</a></li>
+                        <li><a style="text-align:center" href="#">🐶🐱🐭🐹🐰🦊🐻🐼🐨🐯🦁🐮🐷🐽🐸🐵🙈🙉🙊🐒🐔🐧</a></li>
                     </ul>
                 </div>
             </div>
         </nav>
 
         <h1>Let's write some poem!</h1>
-        <textarea id="text_input" class="form-control" rows="5" style="font-size: 1.5em">
+        <textarea id="text_input" class="form-control" rows="4" style="font-size: 1.5em">
 There's a patch of old snow in a corner
 That I should have guessed
 Was a blow-away paper the rain
@@ -79,13 +75,15 @@ If I ever read it. </textarea>
         <h4>There is an sample poem here. Click any word in the poem below.After that, go head <br>
             click options in the left sidebar and select word candidates to replace the current word.</h4>
         <h4>You can write your own poem in the text box above and press Enter. When you finish.</h4>
+        <br>
+        <br>
         <div id="text_output">this is the output</div>
 
         <!-- Use a button to open the snackbar -->
         <button onclick="myFunction()">Show Snackbar</button>
 
         <!-- The actual snackbar -->
-        <div id="snackbar">Some text some message..</div>
+        <div id="snackbar">This is the original word</div>
     </div>
 </div>
 
@@ -104,17 +102,6 @@ If I ever read it. </textarea>
       $('#sidebar').toggleClass('active')
     })
   })
-
-  function myFunction() {
-    // Get the snackbar DIV
-    var x = document.getElementById("snackbar")
-
-    // Add the "show" class to DIV
-    x.className = "show";
-
-    // After 3 seconds, remove the show class from DIV
-    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 5000);
-  }
 </script>
 
 
