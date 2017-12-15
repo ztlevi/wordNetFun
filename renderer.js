@@ -59,7 +59,8 @@ let refreshOutputText = () => {
   $('.word').click(function () {
     // empty submenus
     $('#synsets').empty()
-    $('#antonyms').empty()
+    $('#hypernyms').empty()
+    $('#hyponyms').empty()
 
     if ($lastClickedWord !== null) {
       $lastClickedWord.css('background-color', '#fafafa')
@@ -92,12 +93,12 @@ ipcRenderer.on('result', (event, ret) => {
   // synsets
   $synsets = $('#synsets')
   $synsets.empty()
-  let synsets = ret['synset']
+  let synsets = ret['synset'] ? ret['synset'] : []
   let synsets_pool = new Set()
 
   // add original word
   synsets_pool.add(ret['word'])
-  $synsets.append($('<li></li>').html('<a href="#" class="candidate" description="Reset to the original word">' + ret['word'] + '</a>'))
+  $synsets.append($('<li></li>').html('<a class="candidate" description="Reset to the original word">' + ret['word'] + '</a>'))
 
   function addSynsetSubmenu (i, des) {
     $synsets.append(
@@ -108,7 +109,7 @@ ipcRenderer.on('result', (event, ret) => {
   }
 
   for (let i = 0; i < synsets.length; i++) {
-    if (synsets[i].words.length > 1) {
+    if (synsets[i].words !== null && synsets[i].words.length > 1) {
       let $synsetSubmenu = addSynsetSubmenu(i, synsets[i].lexdomain)
 
       for (let j = 0; j < synsets[i].words.length; j++) {
@@ -116,28 +117,79 @@ ipcRenderer.on('result', (event, ret) => {
         let description = synsets[i].definition
         if (!synsets_pool.has(lemma)) {
           synsets_pool.add(lemma)
-          $synsetSubmenu.append($('<li></li>').html('<a href="#" class="candidate" description="' + description + '">' + lemma + '</a>'))
+          $synsetSubmenu.append($('<li></li>').html('<a class="candidate" description="' + description + '">' + lemma + '</a>'))
         }
       }
     }
   }
 
-  // antonyms
-  let antonyms = ret['antonyms']
-  let antonyms_pool = new Set()
+  //region antonyms
+  // // antonyms
+  // let antonyms = ret['antonyms']
+  // let antonyms_pool = new Set()
+  //
+  // // add original word
+  // antonyms_pool.add(ret['word'])
+  // $('#antonymsSubmenu').append($('<li></li>').html('<a href="#" class="candidate">' + ret['word'] + '</a>'))
+  //
+  // for (let i = 0; i < antonyms.length; i++) {
+  //   let antonym = antonyms[i].antonym
+  //   if (!antonyms_pool.has(antonym)) {
+  //     antonyms_pool.add(antonym)
+  //     $('#antonymsSubmenu').append($('<li></li>').html('<a href="#" class="candidate">' + antonym + '</a>'))
+  //   }
+  // }
+  //endregion
+
+  //region hypernym
+  $hypernyms = $('#hypernyms')
+  $hypernyms.empty()
+  let hypernyms = ret['hypernyms'] ? ret['hypernyms'] : []
+  let hypernyms_pool = new Set()
 
   // add original word
-  antonyms_pool.add(ret['word'])
-  $('#antonymsSubmenu').append($('<li></li>').html('<a href="#" class="candidate">' + ret['word'] + '</a>'))
+  hypernyms_pool.add(ret['word'])
+  $hypernyms.append($('<li></li>').html('<a class="candidate" description="Reset to the original word">' + ret['word'] + '</a>'))
 
-  for (let i = 0; i < antonyms.length; i++) {
-    let antonym = antonyms[i].antonym
-    if (!antonyms_pool.has(antonym)) {
-      antonyms_pool.add(antonym)
-      $('#antonymsSubmenu').append($('<li></li>').html('<a href="#" class="candidate">' + antonym + '</a>'))
+  for (let i = 0; i < hypernyms.length; i++) {
+    if (hypernyms[i].words) {
+      for (let j = 0; j < hypernyms[i].words.length; j++) {
+        let lemma = hypernyms[i].words[j].lemma
+        let description = hypernyms[i].definition
+        if (!hypernyms_pool.has(lemma)) {
+          hypernyms_pool.add(lemma)
+          $hypernyms.append($('<li></li>').html('<a class="candidate" description="' + description + '">' + lemma + '</a>'))
+        }
+      }
     }
   }
+  //endregion
 
+  //region hyponyms
+  $hyponyms = $('#hyponyms')
+  $hyponyms.empty()
+  let hyponyms = ret['hyponyms'] ? ret['hyponyms'] : []
+  let hyponyms_pool = new Set()
+
+  // add original word
+  hyponyms_pool.add(ret['word'])
+  $hyponyms.append($('<li></li>').html('<a class="candidate" description="Reset to the original word">' + ret['word'] + '</a>'))
+
+  for (let i = 0; i < hyponyms.length; i++) {
+    if (hyponyms[i].words !== null) {
+      for (let j = 0; j < hyponyms[i].words.length; j++) {
+        let lemma = hyponyms[i].words[j].lemma
+        let description = hyponyms[i].definition
+        if (!hyponyms_pool.has(lemma)) {
+          hyponyms_pool.add(lemma)
+          $hyponyms.append($('<li></li>').html('<a class="candidate" description="' + description + '">' + lemma + '</a>'))
+        }
+      }
+    }
+  }
+  //endregion
+
+  let timer
   function showSnackBar () {
     // Get the snackbar DIV
     let x = $('#snackbar')
@@ -148,8 +200,9 @@ ipcRenderer.on('result', (event, ret) => {
     // Add the "show" class to DIV
     x.attr('class', 'show')
 
+    window.clearTimeout(timer)
     // After 3 seconds, remove the show class from DIV
-    setTimeout(function () {
+    timer = window.setTimeout(function () {
       x.attr('class', '')
     }, 7000)
   }

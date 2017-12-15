@@ -61,19 +61,50 @@ var wordNet = require('wordnet-magic')
 var wn = wordNet('./db/sqlite-31.db')
 
 // receive the word
-ipcMain.on('word', (event, received_word) => {
+ipcMain.on('word', async function (event, received_word) {
   console.log(received_word)
   let word = new wn.Word(received_word)
   let ret = {}
   ret['word'] = received_word
-  Promise.all([word.getSynsets(), word.getAntonyms()])
-    .then(result => {
-      ret['synset'] = result[0] ? result[0] : []
-      ret['antonyms'] = result[1] ? result[1] : []
-      mainWindow.webContents.send('result', ret)
-    })
-    .catch((error)=>{
-      console.log(error)
-      mainWindow.webContents.send('result', ret)
-    })
+  let result = new Array(4)
+  result[0] = await word.getSynsets()
+  // result[1] = await word.getAntonyms()
+
+  let pos = result[0][0].pos
+  let synsetWord = received_word + '.' + pos
+  console.log(synsetWord)
+
+  // wn.fetchSynset( 'american.n.3' ).then( function( synset ) {
+  //   console.log( synset );
+  //   synset.getHyponyms().then( function( hyponym ) {
+  //     console.log( util.inspect( hyponym, null, 3 ) );
+  //   });
+  // })
+  result[1] = []
+  result[2] = []
+
+  for (let i = 0; i < result[0].length; i++) {
+    let hypernyms = await result[0][i].getHypernyms()
+    if (hypernyms !== null) {
+      for (let j = 0; j < hypernyms.length; j++) {
+        result[1].push(hypernyms[j])
+      }
+    }
+
+    let hyponyms = await result[0][i].getHyponyms()
+    if (hyponyms !== null) {
+      for (let j = 0; j < hyponyms.length; j++) {
+        result[2].push(hyponyms[j])
+      }
+    }
+  }
+
+  ret['synset'] = result[0]
+  ret['hypernyms'] = result[1]
+  ret['hyponyms'] = result[2]
+  mainWindow.webContents.send('result', ret)
+  // .catch((error)=>{
+  //   console.log(error)
+  //   mainWindow.webContents.send('result', ret)
+  // }
 })

@@ -17,25 +17,37 @@
         </div>
 
         <ul class="list-unstyled components">
-            <p>Synsets</p>
-            <li class="active" id="synsets">
-            </li>
-            <p>Antonyms</p>
+            <ul class="list-unstyled">Synset: a set of one or more synonyms</ul>
+            <p><a href="#synsets" style="display: block" data-toggle="collapse" aria-expanded="false">Synsets</a></p>
+            <li id="synsets" class="collapse list-unstyled"></li>
+
+            <ul class="list-unstyled">Hypernym: a word that is more generic than a given word</ul>
+            <p><a href="#hypernyms" style="display: block" data-toggle="collapse" aria-expanded="false">Hypernyms</a>
+            </p>
+            <li id="hypernyms" class="collapse list-unstyled"></li>
+
+            <ul class="list-unstyled">Hyponym: a word that is more specific than a given word</ul>
+            <p><a href="#hyponyms" style="display: block" data-toggle="collapse" aria-expanded="false">Hyponyms</a></p>
+            <li id="hyponyms" class="collapse list-unstyled"></li>
+
+            <p>About</p>
             <li>
-                <a href="#antonymsSubmenu" data-toggle="collapse" aria-expanded="false">Antonyms</a>
-                <ul class="collapse list-unstyled" id="antonymsSubmenu"></ul>
-            </li>
-            <li>
-                <a href="#">Portfolio</a>
-            </li>
-            <li>
-                <a href="#">Contact</a>
+                <a href="#author" data-toggle="collapse" aria-expanded="false">Author</a>
+                <ul class="collapse list-unstyled" id="author">
+                    <a href="#">Ting Zhou</a>
+                </ul>
+
+                <a href="#email" data-toggle="collapse" aria-expanded="false">Contact</a>
+                <ul class="collapse list-unstyled" id="email">
+                    <a href="mailto:ztlevi1993@gmail.com">ztlevi1993@gmail.com</a>
+                </ul>
             </li>
         </ul>
 
         <ul class="list-unstyled CTAs">
-            <li><a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a></li>
-            <li><a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a></li>
+            <li><a href="https://github.com/ztlevi/wordNetFun" class="download" target="_blank">Checkout my Github!</a>
+            </li>
+            <li><a href="#" class="article">Have fun!</a></li>
         </ul>
     </nav>
 
@@ -54,7 +66,7 @@
 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a style="text-align:center" href="#">🐶🐱🐭🐹🐰🦊🐻🐼🐨🐯🦁🐮🐷🐽🐸🐵🙈🙉🙊🐒🐔🐧</a></li>
+                        <li><a style="text-align:center" href="#">🎉⭐🎉⭐🎉⭐🎉⭐🎉⭐🎉⭐🎉⭐🎉⭐🎉⭐🎉⭐🎉⭐🎉⭐🎉⭐🎉⭐️</a></li>
                     </ul>
                 </div>
             </div>
@@ -72,15 +84,12 @@ Small print overspread it,
 The news of a day I've forgotten --
 If I ever read it. </textarea>
         <h3>Instruction: </h3>
-        <h4>There is an sample poem here. Click any word in the poem below.After that, go head <br>
+        <h4>There is an sample poem here. Click any word in the poem below. After that, go head <br>
             click options in the left sidebar and select word candidates to replace the current word.</h4>
-        <h4>You can write your own poem in the text box above and press Enter. When you finish.</h4>
+        <h4>You can write your own poem in the text box above and press Enter when you finish.</h4>
         <br>
         <br>
         <div id="text_output">this is the output</div>
-
-        <!-- Use a button to open the snackbar -->
-        <button onclick="myFunction()">Show Snackbar</button>
 
         <!-- The actual snackbar -->
         <div id="snackbar">This is the original word</div>

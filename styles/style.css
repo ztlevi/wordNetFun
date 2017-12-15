@@ -3,7 +3,6 @@
 */
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 
-
 body {
     font-family: 'Poppins', sans-serif;
     background: #fafafa;
@@ -80,7 +79,8 @@ a, a:hover, a:focus {
 }
 
 #sidebar ul p {
-    color: #fff;
+    background: #fff;
+    color: #6d7fcc;
     padding: 10px;
 }
 
@@ -89,16 +89,16 @@ a, a:hover, a:focus {
     font-size: 1.1em;
     display: block;
 }
+
 #sidebar ul li a:hover {
     color: #7386D5;
     background: #fff;
 }
 
 #sidebar ul li.active > a, a[aria-expanded="true"] {
-    color: #fff;
-    background: #6d7fcc;
+    /*color: #fff;*/
+    /*background: #6d7fcc;*/
 }
-
 
 a[data-toggle="collapse"] {
     position: relative;
@@ -112,10 +112,10 @@ a[aria-expanded="false"]::before, a[aria-expanded="true"]::before {
     font-family: 'Glyphicons Halflings';
     font-size: 0.6em;
 }
+
 a[aria-expanded="true"]::before {
     content: '\e260';
 }
-
 
 ul ul a {
     font-size: 0.9em !important;
@@ -145,8 +145,6 @@ a.article, a.article:hover {
     color: #fff !important;
 }
 
-
-
 /* ---------------------------------------------------
     CONTENT STYLE
 ----------------------------------------------------- */
@@ -164,9 +162,11 @@ a.article, a.article:hover {
         min-width: 150px;
         max-width: 150px;
     }
+
     #sidebar.active {
         margin-left: -150px;
     }
+
     #sidebarCollapse span {
         display: none;
     }
@@ -175,8 +175,8 @@ a.article, a.article:hover {
 /* The snackbar - position it at the bottom and in the middle of the screen */
 #snackbar {
     visibility: hidden; /* Hidden by default. Visible on click */
-    min-width: 250px; /* Set a default minimum width */
-    margin-left: -125px; /* Divide value of min-width by 2 */
+    min-width: 200px; /* Set a default minimum width */
+    margin-left: -100px; /* Divide value of min-width by 2 */
     background-color: #333; /* Black background color */
     color: #fff; /* White text color */
     text-align: center; /* Centered text */
@@ -194,27 +194,51 @@ a.article, a.article:hover {
 
     /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
     However, delay the fade out process for 2.5 seconds */
-    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 6.5s;
+    animation: fadein 0.5s, fadeout 0.5s 6.5s;
 }
 
 /* Animations to fade the snackbar in and out */
 @-webkit-keyframes fadein {
-    from {bottom: 0; opacity: 0;}
-    to {bottom: 30px; opacity: 1;}
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
 }
 
 @keyframes fadein {
-    from {bottom: 0; opacity: 0;}
-    to {bottom: 30px; opacity: 1;}
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
 }
 
 @-webkit-keyframes fadeout {
-    from {bottom: 30px; opacity: 1;}
-    to {bottom: 0; opacity: 0;}
+    from {
+        bottom: 30px;
+        opacity: 1;
+    }
+    to {
+        bottom: 0;
+        opacity: 0;
+    }
 }
 
 @keyframes fadeout {
-    from {bottom: 30px; opacity: 1;}
-    to {bottom: 0; opacity: 0;}
+    from {
+        bottom: 30px;
+        opacity: 1;
+    }
+    to {
+        bottom: 0;
+        opacity: 0;
+    }
 }
