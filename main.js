@@ -58,7 +58,8 @@ app.on('activate', function () {
 
 var wordNet = require('wordnet-magic')
 
-var wn = wordNet('./db/sqlite-31.db')
+let db_path = app.getAppPath() + '/db/sqlite-31.db'
+var wn = wordNet(db_path)
 
 // receive the word
 ipcMain.on('word', async function (event, received_word) {

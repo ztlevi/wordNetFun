@@ -2,3 +2,5 @@ node_modules
 
 db/*
 !db
+
+word_net_fun*
